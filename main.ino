@@ -9,10 +9,9 @@
 #define PIN 22
 #define DHT22_PIN 31
 
-// Setup a DHT22 instance
+// 初始化DHT22和 WS2812B
 DHT22 myDHT22(DHT22_PIN);
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(236, PIN, NEO_GRB + NEO_KHZ800);
-
 
 char state = '0';
 char c;
@@ -20,7 +19,7 @@ byte mac[] = { 0xCE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 IPAddress ip(192,168,31,190);
  
 IPAddress myDns(114,114,114,114);
- String myStr;
+String myStr;
 // IPAddress server(121,40,240,193); 
 EthernetClient client;
 boolean reading = false;
@@ -59,11 +58,7 @@ bool ADy, A12h, Apm;
 byte year, month, date, DoW, hour, minute, second;
 
 
-
-
-
 void setup() {
-  // 设置串口通信波特率
 
   Wire.begin();
   Serial.begin(115200);
@@ -80,6 +75,7 @@ void setup() {
   
 void loop(void) {
  
+  //设置默认颜色
   at = 0;
   bt = 50;
   ct = 150;
@@ -107,39 +103,38 @@ void loop(void) {
     Serial.println(myStr);
     parseThangs(myStr);
 
+  }
+
+  delay(3000);
+
+
+  if(r == 0 && g == 0 && b == 0){
+
+
+  } else{
+    r = 0;
+    g = 0;
+    b = 255;
+
+    ry = 0;
+    gy = 0;
+    by = 255;
 
   }
 
-    delay(3000);
 
-
-    if(r == 0 && g == 0 && b == 0){
-
-
-    } else{
-      r = 0;
-      g = 0;
-      b = 255;
-
-      ry = 0;
-      gy = 0;
-      by = 255;
-
-    }
-
-
-    DHT22_ERROR_t errorCode;    
-    Serial.print("Requesting data...");
-    errorCode = myDHT22.readData();
-    switch(errorCode)
-    {
-      case DHT_ERROR_NONE:
-        Serial.print("Got Data ");
-        
-        int tem;
-        tem = int(myDHT22.getTemperatureC());
-        Serial.print(tem);
-        Serial.print("C ");
+  DHT22_ERROR_t errorCode;    
+  Serial.print("Requesting data...");
+  errorCode = myDHT22.readData();
+  switch(errorCode)
+  {
+    case DHT_ERROR_NONE:
+      Serial.print("Got Data ");
+      
+      int tem;
+      tem = int(myDHT22.getTemperatureC());
+      Serial.print(tem);
+      Serial.print("C ");
     setNum(1, 11);
     setNum(0, 10);
 
@@ -250,15 +245,12 @@ void loop(void) {
       setNum(3, 3);
     }
 
-
     break;
-
-    }
-
+  }
 
   delay(3000);
 
-
+  //初始化时间
   int second,minute,hour,date,month,year,temperature; 
   second=Clock.getSecond();
   minute=Clock.getMinute();
@@ -548,7 +540,7 @@ void loop(void) {
     setNum(0, 9);
     setNum(1, 5);
   }
-    myStr = "";
+  myStr = "";
 
 
   
@@ -556,9 +548,7 @@ void loop(void) {
   if(!client.connected() && (millis() - lastConnectionTime > postingInterval)) {
     if (client.connect(server, 80)) {
  
-
       client.println("GET /index.php?s=/addon/HelloWorld/HelloWorld/show HTTP/1.1");
-
       client.println("Host: wx.xank.cn");
       client.println("User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.107 Safari/537.36");
       client.println("Connection: close");
@@ -573,16 +563,11 @@ void loop(void) {
   }
   lastConnected = client.connected();
 
-
-    Serial.println("connection failed");
-  
+  Serial.println("connection failed");
 }
 
 
-
-
-
-//判断
+//序列号输入
 void parseThangs(String str) {
 
   int startIndex = str.indexOf("z");

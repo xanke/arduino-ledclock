@@ -1,16 +1,20 @@
+/*
 
+01 02 03 04 05 06 07 08 09 10 11 12 13
+
+
+*/
 
 void setNum(int i, int n){
-
 
 
   uint32_t color = strip.Color(r, g, b);
   uint32_t energy =  strip.Color(ry, gy, by); //strip.Color(ry, gy, by);
   uint32_t black = strip.Color(0, 0, 0);
 
-  // // i = 6;
+
   if(i == 0){
-    i = 164;//第四位
+    i = 164;
   } else if (i == 1){
     i = 109;
   } else if (i == 2){
@@ -844,9 +848,6 @@ void setNum(int i, int n){
     strip.setPixelColor(i + 54, color);
     strip.setPixelColor(i + 55, color);
   }
-
-
-
 
   strip.show();
 }
